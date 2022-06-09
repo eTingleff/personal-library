@@ -21,5 +21,9 @@ module.exports = {
 
   getInstance() {
     return _db;
-  }
+  },
+
+  books: () => _db.collection('books'),
+
+  comments: () => _db.collection('comments'),
 }
