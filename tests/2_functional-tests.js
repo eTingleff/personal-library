@@ -46,7 +46,6 @@ suite('Functional Tests', function() {
           .post('/api/books')
           .send({ title: 'Moby Dick' })
           .end((err, res) => {
-            assert.equal(res.status, 200);
             assert.isTrue(ObjectId.isValid(res.body._id));
             assert.equal(res.body.title, 'Moby Dick');
             testingId = res.body._id;
@@ -60,7 +59,6 @@ suite('Functional Tests', function() {
           .post('/api/books')
           .send({})
           .end((err, res) => {
-            assert.equal(res.status, 400);
             assert.equal(res.text, 'missing required field title');
 
             done();
@@ -76,7 +74,6 @@ suite('Functional Tests', function() {
         chai.request(server)
           .get('/api/books')
           .end((err, res) => {
-            assert.equal(res.status, 200);
             assert.isArray(res.body);
             assert.hasAllKeys(res.body[0], [
               '_id',
@@ -97,7 +94,6 @@ suite('Functional Tests', function() {
         chai.request(server)
           .get(`/api/books/${new ObjectId()}`)
           .end((err, res) => {
-            assert.equal(res.status, 404);
             assert.equal(res.text, 'no book exists');
 
             done();
@@ -108,7 +104,6 @@ suite('Functional Tests', function() {
         chai.request(server)
           .get(`/api/books/${testingId}`)
           .end((err, res) => {
-            assert.equal(res.status, 200);
             assert.hasAllKeys(res.body, [
               '_id',
               'title',
@@ -134,7 +129,6 @@ suite('Functional Tests', function() {
           .post(`/api/books/${testingId}`)
           .send({ comment: 'Test comment' })
           .end((err, res) => {
-            assert.equal(res.status, 200);
             assert.deepEqual(res.body, {
               _id: testingId,
               title: 'Moby Dick',
@@ -150,7 +144,6 @@ suite('Functional Tests', function() {
           .post(`/api/books/${testingId}`)
           .send({})
           .end((err, res) => {
-            assert.equal(res.status, 400);
             assert.equal(res.text, 'missing required field comment');
 
             done();
@@ -162,7 +155,6 @@ suite('Functional Tests', function() {
           .post(`/api/books/${new ObjectId()}`)
           .send({ comment: 'Test comment' })
           .end((err, res) => {
-            assert.equal(res.status, 404);
             assert.equal(res.text, 'no book exists')
 
             done();
@@ -177,7 +169,6 @@ suite('Functional Tests', function() {
         chai.request(server)
           .delete(`/api/books/${testingId}`)
           .end((err, res) => {
-            assert.equal(res.status, 200)
             assert.equal(res.text, 'delete successful');
 
             done();
@@ -188,7 +179,6 @@ suite('Functional Tests', function() {
         chai.request(server)
           .delete(`/api/books/${new ObjectId()}`)
           .end((err, res) => {
-            assert.equal(res.status, 404)
             assert.equal(res.text, 'no book exists');
 
             done();

@@ -11,7 +11,6 @@ exports.createCommentService = async (bookId, commentText) => {
     if (!ObjectId.isValid(bookId)) {
 
       return {
-        status: 404,
         error: 'no book exists',
       };
     }
@@ -19,7 +18,6 @@ exports.createCommentService = async (bookId, commentText) => {
     if (!commentText || !commentText.trim()) {
 
       return {
-        status: 400,
         error: 'missing required field comment',
       };
     }
@@ -35,7 +33,6 @@ exports.createCommentService = async (bookId, commentText) => {
     if (!result || !result.insertedId) {
 
       return {
-        status: 404,
         error: 'no book exists',
       };
     }

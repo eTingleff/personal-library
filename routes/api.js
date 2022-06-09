@@ -25,7 +25,7 @@ module.exports = function (app) {
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
       const response = await getAllBooksService();
 
-      return res.status(response.status).json(response.data);
+      return res.json(response);
     })
 
     .post(async (req, res) => {
@@ -35,20 +35,16 @@ module.exports = function (app) {
 
       if (response.error) {
 
-        return res.status(response.status).send(response.error);
+        return res.send(response.error);
       }
-      return res.status(response.status).json(response.data);
+      return res.json(response);
     })
 
     .delete(async (req, res) => {
       //if successful response will be 'complete delete successful'
       const response = await deleteAllBooksService();
-      if (response.error) {
 
-        return res.status(response.status).send(response.error);
-      }
-
-      return res.status(response.status).send(response.data);
+      return res.send(response);
     });
 
 
@@ -60,10 +56,10 @@ module.exports = function (app) {
       const response = await getBookService(bookid);
       if (response.error) {
 
-        return res.status(response.status).send(response.error);
+        return res.send(response.error);
       }
 
-      return res.status(response.status).json(response.data);
+      return res.json(response);
     })
 
     .post(async (req, res) => {
@@ -73,22 +69,18 @@ module.exports = function (app) {
       const response = await addBookCommentService(bookid, comment);
       if (response.error) {
 
-        return res.status(response.status).send(response.error);
+        return res.send(response.error);
       }
 
-      return res.status(response.status).json(response.data);
+      return res.json(response);
     })
 
     .delete(async (req, res) => {
       let bookid = req.params.id;
       //if successful response will be 'delete successful'
       const response = await deleteOneBookService(bookid);
-      if (response.error) {
 
-        return res.status(response.status).send(response.error);
-      }
-
-      return res.status(response.status).send(response.data);
+      return res.send(response);
     });
 
 };

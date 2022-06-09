@@ -20,12 +20,7 @@ exports.getAllBooksService = async () => {
     };
     const books = await findBooks({}, { projection });
 
-    const response = {
-      status: 200,
-      data: books ? books : [],
-    };
-
-    return response;
+    return books ? books : [];
   } catch (err) {
     console.error('getBooksService error: ', err);
 
@@ -38,7 +33,6 @@ const getBookService = async (bookId) => {
     if (!ObjectId.isValid(bookId)) {
 
       return {
-        status: 404,
         error: 'no book exists',
       };
     }
@@ -52,7 +46,6 @@ const getBookService = async (bookId) => {
     if (!book) {
 
       return {
-        status: 404,
         error: 'no book exists',
       };
     }
@@ -70,14 +63,9 @@ const getBookService = async (bookId) => {
       }
     }
 
-    const response = {
+    return {
       ...book,
       comments,
-    };
-
-    return {
-      status: 200,
-      data: response,
     };
   } catch (err) {
     console.error('getBookService error: ', err);
@@ -92,10 +80,7 @@ exports.createBookService = async (bookTitle) => {
   try {
     if (!bookTitle || !bookTitle.trim()) {
 
-      return {
-        status: 400,
-        error: 'missing required field title',
-      };
+      return { error: 'missing required field title' };
     }
 
     const title = bookTitle.trim();
@@ -109,22 +94,23 @@ exports.createBookService = async (bookTitle) => {
     const insertResult = await insertBook(book);
     if (!insertResult.insertedId) {
 
-      return 'could not create book';
+      return {
+        error: 'could not create book',
+      };
     }
 
     const _id = insertResult.insertedId;
 
     return {
-      status: 200,
-      data: {
-        _id,
-        title,
-      },
+      _id,
+      title,
     };
   } catch (err) {
     console.error('createBookService error: ', err);
 
-    return 'could not create book';
+    return {
+      error: 'could not create book',
+    };
   }
 }
 
@@ -172,10 +158,7 @@ exports.deleteAllBooksService = async () => {
       return 'could not delete';
     }
 
-    return {
-      status: 200,
-      data: 'complete delete successful',
-    };
+    return 'complete delete successful';
   } catch (err) {
     console.error('deleteAllBooksService error: ', err);
 
@@ -187,10 +170,7 @@ exports.deleteOneBookService = async (bookId) => {
   try {
     if (!ObjectId.isValid(bookId)) {
 
-      return {
-        status: 404,
-        error: 'no book exists',
-      };
+      return 'no book exists';
     }
 
     const _id = new ObjectId(bookId);
@@ -206,16 +186,10 @@ exports.deleteOneBookService = async (bookId) => {
 
     if (typeof deletedCount === 'number' && deletedCount === 0) {
 
-      return {
-        status: 404,
-        error: 'no book exists',
-      };
+      return 'no book exists';
     }
 
-    return {
-      status: 200,
-      data: 'delete successful',
-    };
+    return 'delete successful';
   } catch (err) {
     console.error('deleteOneBookService error: ', err);
 
